@@ -13,7 +13,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('write_post');
+        $category = DB::table('categories')->get();
+        return view('write_post', compact('category'));
     }
 
     /**
@@ -86,7 +87,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category=DB::table('categories')->where('id', $id)->first();
+        return view('editcategory', compact('category'));
     }
 
     /**
@@ -98,7 +100,32 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'slug' => 'required',
+        ]);
+
+        $data = array();
+        $data['name']= $request->name;
+        $data['slug']= $request->slug;
+        $category = DB::table('categories')->where('id', $id)->update($data);
+
+        if ($category) {
+            $notification = array(
+                'message' => 'Successfully Category Updated', 
+                'alert-type' => 'success'
+            );
+            
+            return Redirect()->route('all.category')->with($notification);
+        }
+        else {
+            $notification = array(
+                'message' => 'Nothing to update', 
+                'alert-type' => 'error'
+            );
+            
+            return Redirect()->back()->with($notification);
+        }
     }
 
     /**
