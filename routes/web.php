@@ -5,8 +5,9 @@ Route::get('/', function () {
     return view('layout.web.layout');
 });
 
-Route::get('about/me','HomeController@about')->name('about');
-Route::get('contact/me', 'HomeController@contact')->name('contact');
+ Route::get('about/me','HomeController@about')->name('about');
+ Route::get('contact/me', 'HomeController@contact')->name('contact');
+ Route::post('contact/store', 'HomeController@store')->name('store.me');
 
 //Category crude here 
 Route::get('write/post','PostController@index')->name('write.post');
